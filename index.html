@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خارج نطاق الترجمة</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #131313;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+        p {
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        .bold {
+            font-weight: bold;
+        }
+        input, button {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+        }
+        input {
+            background-color: white;
+            color: black;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: white;
+            color: black;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 4px;
+        }
+        .close {
+            color: #aaa;
+            float: left;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .glitch-text {
+            position: relative;
+            animation: glitch 1s linear infinite;
+        }
+        @keyframes glitch {
+            2%,64% {
+                transform: translate(2px,0) skew(0deg);
+            }
+            4%,60% {
+                transform: translate(-2px,0) skew(0deg);
+            }
+            62% {
+                transform: translate(0,0) skew(5deg); 
+            }
+        }
+        .glitch-text:before,
+        .glitch-text:after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+        }
+        .glitch-text:before {
+            animation: glitchTop 1s linear infinite;
+            clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+            -webkit-clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+        }
+        @keyframes glitchTop {
+            2%,64% {
+                transform: translate(2px,-2px);
+            }
+            4%,60% {
+                transform: translate(-2px,2px);
+            }
+            62% {
+                transform: translate(13px,-1px) skew(-13deg); 
+            }
+        }
+        .glitch-text:after {
+            animation: glitchBotom 1.5s linear infinite;
+            clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+            -webkit-clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+        }
+        @keyframes glitchBotom {
+            2%,64% {
+                transform: translate(-2px,0);
+            }
+            4%,60% {
+                transform: translate(-2px,0);
+            }
+            62% {
+                transform: translate(-22px,5px) skew(21deg); 
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="glitch-text" data-text="خارج نطاق الترجمة">خارج نطاق الترجمة</h1>
+    </header>
+    
+    <main>
+        <p>
+            هل تذكر آخر مرة حاولت فيها أن تكون حاضرًا بكامل
+            أفكارك ومشاعرك في محادثتك مع أحدهم؟ 
+            هل حاولت أن تتلفظ بما تشعر به حقًا؟
+            هل حاولت أن ترسل رسالة تعبر عن ما بداخلك 
+            دون الخوف من أحكام أو عواقب؟
+            وهل تتعمق أنت في رسائل الآخرين بمعانيها الحقيقية؟
+        </p>
+        
+        <p class="bold">
+            اكتب ما تشعر أنك تريد أن ترسله للعالم -أو لشخص- في هذه اللحظة ..
+            هل تعتقد أن أحدًا سيجيب؟
+        </p>
+        
+        <input type="text" id="message" placeholder="اكتب رسالتك هنا">
+        <button onclick="sendMessage()">إرسال</button>
+    </main>
+    
+    <footer>
+        <a href="https://instagram.com/sarapx/" target="_blank" rel="noopener noreferrer">Instagram: @sarapx</a>
+    </footer>
+
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>خطأ</h2>
+            <p>تعذر وصول رسالتك</p>
+            <button onclick="handleContinue()">تواصل</button>
+            <button onclick="handleRetract()">تراجع</button>
+        </div>
+    </div>
+
+    <div id="finalModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>رسالة</h2>
+            <p id="finalMessage"></p>
+            <button onclick="closeFinalModal()">إغلاق</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            document.getElementById('errorModal').style.display = 'block';
+        }
+
+        function handleContinue() {
+            document.getElementById('errorModal').style.display = 'none';
+            document.getElementById('finalMessage').innerText = "شكرًا .. في هذه المساحة لا يمكن لأحد أن يقرأ رسالتك إلا أنت.. ولكن.. لعلها محاولة للمرة القادمة التي تتواصل فيها مع من حولك -أو ما حولك- أن تنصت وتتأمل وتشعر وتعبر ، وأخيرًا حاول أن تكون حاضرًا فعلًأ .. إذا كنت تقرأ هذه الكلمات فقد وصلت رسالتي لك ، وآمل أن تصل رسالتك لمن يستحقها";
+            document.getElementById('finalModal').style.display = 'block';
+        }
+
+        function handleRetract() {
+            document.getElementById('errorModal').style.display = 'none';
+            document.getElementById('finalMessage').innerText = "شكرًا لمحاولتك ، إلى اللقاء.";
+            document.getElementById('finalModal').style.display = 'block';
+        }
+
+        function closeFinalModal() {
+            document.getElementById('finalModal').style.display = 'none';
+        }
+
+        // Close the modal when clicking on <span> (x)
+        var spans = document.getElementsByClassName("close");
+        for (var i = 0; i < spans.length; i++) {
+            spans[i].onclick = function() {
+                this.parentElement.parentElement.style.display = 'none';
+            }
+        }
+
+        // Close the modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
